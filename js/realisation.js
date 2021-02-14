@@ -58,4 +58,11 @@ function closeModal(event) {
 // додаєм EventListener 
 refs.gallery.addEventListener('click', clickOnGallery);
 refs.modalCloseBtn.addEventListener('click', closeModal);
-refs.overlay.addEventListener('click', closeModal);
+// refs.overlay.addEventListener('click', closeModal); this one also works
+window.addEventListener('keydown', event => {
+    if (event.code === 'Escape') {closeModal()}
+})
+
+refs.overlay.addEventListener('click', event => {
+    if (event.target === event.currentTarget) {closeModal()}
+});
