@@ -46,6 +46,8 @@ function clickOnGallery(event) {
     refs.modalContent.alt = event.target.alt;
 
     refs.modal.classList.add('is-open');
+
+    window.addEventListener('keydown', cliclEscape);
 }
 
 function closeModal(event) {
@@ -53,15 +55,19 @@ function closeModal(event) {
     refs.modalContent.alt = '';
 
     refs.modal.classList.remove('is-open');
+
+    window.removeEventListener('keydown', cliclEscape)
+}
+
+function cliclEscape (event) {
+    if (event.code === 'Escape') {closeModal()}
 }
 
 // додаєм EventListener 
 refs.gallery.addEventListener('click', clickOnGallery);
 refs.modalCloseBtn.addEventListener('click', closeModal);
 // refs.overlay.addEventListener('click', closeModal); this one also works
-window.addEventListener('keydown', event => {
-    if (event.code === 'Escape') {closeModal()}
-})
+
 
 refs.overlay.addEventListener('click', event => {
     if (event.target === event.currentTarget) {closeModal()}
