@@ -13,7 +13,7 @@ const refs = {
     modalContent: document.querySelector('img.lightbox__image'),
     modalCloseBtn: document.querySelector('button'),
 }
-console.log(refs.modalContent)
+
 // створюємо розмітку галереї (динамічно)
 const createGallery = images.map(item => {
     const liRef = document.createElement('li');
