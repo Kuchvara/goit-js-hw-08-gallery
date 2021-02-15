@@ -14,6 +14,8 @@ const refs = {
     modalCloseBtn: document.querySelector('button'),
 }
 
+let activeIndex;
+
 // створюємо розмітку галереї (динамічно)
 const createGallery = images.map(item => {
     const liRef = document.createElement('li');
@@ -27,6 +29,7 @@ const createGallery = images.map(item => {
     imgRef.classList.add('gallery__image');
     imgRef.src = item.preview;
     imgRef.dataset.source = item.original;
+    imgRef.dataset.index = images.indexOf(item);
     imgRef.alt = item.description;
 
     linkRef.append(imgRef);
@@ -44,10 +47,14 @@ function clickOnGallery(event) {
     
     refs.modalContent.src = event.target.dataset.source;
     refs.modalContent.alt = event.target.alt;
+    refs.modalContent.dataset.index = event.target.dataset.index;
 
     refs.modal.classList.add('is-open');
 
+    activeIndex = Number(refs.modalContent.dataset.index)
+
     window.addEventListener('keydown', cliclEscape);
+    window.addEventListener('keydown', changeImg);
 }
 
 function closeModal(event) {
@@ -57,18 +64,33 @@ function closeModal(event) {
     refs.modal.classList.remove('is-open');
 
     window.removeEventListener('keydown', cliclEscape)
+    window.removeEventListener('keydown', changeImg);
 }
 
 function cliclEscape (event) {
     if (event.code === 'Escape') {closeModal()}
 }
 
+function changeImg(event) {
+    
+    if (event.code === 'ArrowLeft') {
+        if (activeIndex > 0) {refs.modalContent.src = images[(activeIndex -= 1)].original;
+            refs.modalContent.alt = images[(activeIndex)].description;
+        }        
+    } else if (event.code === 'ArrowRight') {
+        if (activeIndex < images.length - 1) {
+          refs.modalContent.src = images[(activeIndex += 1)].original;
+        refs.modalContent.alt = images[(activeIndex)].description;
+        }        
+    } 
+}
+
 // додаєм EventListener 
 refs.gallery.addEventListener('click', clickOnGallery);
 refs.modalCloseBtn.addEventListener('click', closeModal);
 // refs.overlay.addEventListener('click', closeModal); this one also works
-
-
 refs.overlay.addEventListener('click', event => {
     if (event.target === event.currentTarget) {closeModal()}
 });
+
+// window.addEventListener('keydown', event => console.log(event.code))
